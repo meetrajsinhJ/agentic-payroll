@@ -1,5 +1,9 @@
 # Agentic AI Timesheet to Salary Slip System
 
+[![CI/CD Pipeline](https://github.com/meetrajsinhJ/agentic-payroll/actions/workflows/ci-cd.yaml/badge.svg)](https://github.com/meetrajsinhJ/agentic-payroll/actions/workflows/ci-cd.yaml)
+[![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/meetrajsinhJ/agentic-payroll/pkgs/container/agentic-payroll)
+[![Kubernetes](https://img.shields.io/badge/kubernetes-ready-brightgreen)](./k8s/)
+
 An intelligent multi-agent system that automates the process of converting employee timesheets into professional salary slips using LangGraph.
 
 ## System Architecture
@@ -30,6 +34,7 @@ Input (Timesheet) → Agent 1 → Agent 2 → Agent 3 → Output (Salary Slip PD
 
 ## Features
 
+### Core Functionality
 - ✅ Multi-agent workflow orchestration using LangGraph
 - ✅ Automatic timesheet parsing (Excel format)
 - ✅ Progressive tax calculation
@@ -39,11 +44,53 @@ Input (Timesheet) → Agent 1 → Agent 2 → Agent 3 → Output (Salary Slip PD
 - ✅ Error handling and validation
 - ✅ Detailed logging and reporting
 
-## Installation
+### DevOps & Deployment
+- ✅ Docker containerization
+- ✅ Kubernetes deployment (CronJob + Manual Job)
+- ✅ CI/CD pipeline with GitHub Actions
+- ✅ Automated Docker image builds
+- ✅ Security scanning with Trivy
+- ✅ GitHub Container Registry integration
+
+## Quick Start
+
+### Option 1: Run Locally
 
 1. Install dependencies:
 ```bash
 pip install -r requirements.txt
+```
+
+2. Generate test timesheets:
+```bash
+python generate_dummy_timesheets.py
+```
+
+3. Process timesheets:
+```bash
+python main.py
+```
+
+### Option 2: Run with Docker
+
+```bash
+# Build image
+docker build -t agentic-payroll:latest .
+
+# Run processing
+docker run --rm \
+  -v $(pwd)/timesheets:/app/timesheets \
+  -v $(pwd)/salary_slips:/app/salary_slips \
+  agentic-payroll:latest
+```
+
+### Option 3: Deploy to Kubernetes
+
+See [DOCKER_DESKTOP_K8S_DEPLOYMENT_GUIDE.md](./DOCKER_DESKTOP_K8S_DEPLOYMENT_GUIDE.md) for complete instructions.
+
+```bash
+# Quick deployment
+kubectl apply -f k8s/
 ```
 
 ## Usage
@@ -174,11 +221,36 @@ The system includes robust error handling:
 
 ## Technologies Used
 
+### Core Technologies
 - **LangGraph**: Workflow orchestration
 - **Pydantic**: Data validation and modeling
 - **Pandas**: Excel data processing
 - **ReportLab**: PDF generation
 - **Python 3.9+**: Core programming language
+
+### DevOps & Infrastructure
+- **Docker**: Containerization
+- **Kubernetes**: Orchestration (CronJobs, Jobs, PV/PVC)
+- **GitHub Actions**: CI/CD automation
+- **GitHub Container Registry**: Docker image storage
+- **Trivy**: Security vulnerability scanning
+
+## Documentation
+
+- [Docker Desktop Kubernetes Deployment Guide](./DOCKER_DESKTOP_K8S_DEPLOYMENT_GUIDE.md) - Complete K8s deployment with troubleshooting
+- [Minikube Troubleshooting Guide](./MINIKUBE_TROUBLESHOOTING.md) - Volume mounting issues and solutions
+- [CI/CD Setup Guide](./CI_CD_SETUP_GUIDE.md) - GitHub Actions pipeline configuration
+- [Quick Start Guide](./QUICKSTART.md) - 10-minute deployment guide
+
+## Performance
+
+**Latest Successful Run:**
+- Total Employees Processed: 10
+- Success Rate: 100% (10/10)
+- Processing Time: ~9 seconds
+- Total Payroll: $50,876.58
+- Container Image Size: 697MB
+- Resource Usage: 500m CPU, 512Mi RAM
 
 ## License
 
