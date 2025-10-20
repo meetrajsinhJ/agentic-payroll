@@ -56,3 +56,16 @@ k8s/03-persistent-volume-mounted.yaml
 
 # Thumbnails
 ._*
+
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Root node_modules (if any)
+node_modules/
+package-lock.json

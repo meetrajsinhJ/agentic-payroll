@@ -1,21 +1,39 @@
 version: '3.8'
 
 services:
-  # Main application service
-  agentic-payroll:
+  # Backend API service
+  backend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: agentic-payroll-app
+    container_name: payroll-backend
     image: agentic-payroll:latest
     volumes:
-      # Mount directories for input/output
       - ./timesheets:/app/timesheets
       - ./salary_slips:/app/salary_slips
       - ./logs:/app/logs
     environment:
       - PYTHONUNBUFFERED=1
       - LOG_LEVEL=INFO
+      - RUN_MODE=api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - payroll-network
+
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: payroll-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
     restart: unless-stopped
     networks:
       - payroll-network
