@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: payroll-system
+  labels:
+    app: agentic-payroll
+    environment: production

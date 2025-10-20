@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: payroll-processor-manual
+  namespace: payroll-system
+  labels:
+    app: agentic-payroll
+    component: batch-processor
+    run-type: manual
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 3600
+
+  template:
+    metadata:
+      labels:
+        app: agentic-payroll
+        component: batch-processor
+        run-type: manual
+    spec:
+      restartPolicy: OnFailure
+
+      containers:
+      - name: payroll-processor
+        image: agentic-payroll:latest
+        imagePullPolicy: Never
+
+        envFrom:
+        - configMapRef:
+            name: payroll-config
+
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+
+        volumeMounts:
+        - name: data
+          mountPath: /data
+
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: payroll-data-pvc

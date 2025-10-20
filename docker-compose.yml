@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Main application service
+  agentic-payroll:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agentic-payroll-app
+    image: agentic-payroll:latest
+    volumes:
+      # Mount directories for input/output
+      - ./timesheets:/app/timesheets
+      - ./salary_slips:/app/salary_slips
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - payroll-network
+
+  # Future: Add PostgreSQL for employee data
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: payroll-db
+  #   environment:
+  #     POSTGRES_DB: payroll
+  #     POSTGRES_USER: payroll_user
+  #     POSTGRES_PASSWORD: changeme
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - payroll-network
+  #   restart: unless-stopped
+
+  # Future: Add Redis for caching
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: payroll-cache
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - payroll-network
+  #   restart: unless-stopped
+
+networks:
+  payroll-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:

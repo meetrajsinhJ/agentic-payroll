@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Generated output (local testing)
+salary_slips/
+output_salary_slips/
+logs/
+*.log
+
+# Generated timesheets (keep the generator script)
+timesheets/excel/*.xlsx
+timesheets/pdf/*.pdf
+
+# Temporary files
+test-no-volumes.yaml
+*.tmp
+*.bak
+
+# Kubernetes temporary files
+k8s/03-persistent-volume-mounted.yaml
+
+# Docker
+*.tar
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*

@@ -1,0 +1,72 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: payroll-processor
+  namespace: payroll-system
+  labels:
+    app: agentic-payroll
+    component: batch-processor
+spec:
+  # Run at 9 AM on the 1st day of every month
+  schedule: "0 9 1 * *"
+  # For testing, use: "*/5 * * * *" (every 5 minutes)
+
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid  # Don't run if previous job is still running
+
+  jobTemplate:
+    metadata:
+      labels:
+        app: agentic-payroll
+        component: batch-processor
+    spec:
+      backoffLimit: 2  # Retry up to 2 times on failure
+      activeDeadlineSeconds: 3600  # Timeout after 1 hour
+
+      template:
+        metadata:
+          labels:
+            app: agentic-payroll
+            component: batch-processor
+        spec:
+          restartPolicy: OnFailure
+
+          containers:
+          - name: payroll-processor
+            image: agentic-payroll:latest
+            imagePullPolicy: IfNotPresent
+
+            envFrom:
+            - configMapRef:
+                name: payroll-config
+
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "500m"
+              limits:
+                memory: "1Gi"
+                cpu: "1000m"
+
+            volumeMounts:
+            - name: timesheet-data
+              mountPath: /app/timesheets
+              subPath: timesheets
+            - name: salary-slip-data
+              mountPath: /app/salary_slips
+              subPath: salary_slips
+            - name: logs
+              mountPath: /app/logs
+              subPath: logs
+
+          volumes:
+          - name: timesheet-data
+            persistentVolumeClaim:
+              claimName: payroll-data-pvc
+          - name: salary-slip-data
+            persistentVolumeClaim:
+              claimName: payroll-data-pvc
+          - name: logs
+            persistentVolumeClaim:
+              claimName: payroll-data-pvc

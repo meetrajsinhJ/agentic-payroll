@@ -1,0 +1,9 @@
+pandas
+openpyxl
+reportlab
+langgraph
+langchain
+langchain-community
+langchain-openai
+python-dotenv
+pydantic
